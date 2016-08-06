@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.0.xsd
+				http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-2.0.xsd
+				http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-2.5.xsd">
+
+    <bean id="circle" class="org.spring.aop.model.Circle">
+        <property name="name" value="Circle Name"></property>
+    </bean>
+
+    <bean id="triangle" class="org.spring.aop.model.Triangle">
+        <property name="name" value="Triangle Name"></property>
+    </bean>
+
+    <bean id="shapeservice" class="org.spring.aop.service.ShapeService">
+        <property name="circle" ref="circle"></property>
+        <property name="triangle" ref="triangle"></property>
+    </bean>
+
+    <bean name="LoggingAspect" class="org.spring.aop.aspect.LoggingAspect"/>
+    <bean name="LoggingAspectX" class="org.spring.aop.aspect.LoggingAspectX"/>
+
+    <!-- Configuring AOP in Springs alternative use annotations as in LoggingAspect.java -->
+    <aop:config>
+        <aop:aspect id="LoggingAspectX" ref="LoggingAspectX">
+            <aop:pointcut id="allGetters" expression="execution(* get*())"/>
+            <aop:around pointcut-ref="allGetters" method="myAroundAdvice"/>
+        </aop:aspect>
+    </aop:config>
+
+    <context:annotation-config/>
+
+    <aop:aspectj-autoproxy/><!-- configure Aspect in Springs using annotations -->
+
+</beans>
+
+        <!-- Programming Models
+        1)	 In functional programming code is divided into different functions and applications work on interdependibility of these functions
+        2)	In Object Oriented programming we write objects that mirrors model entities but not all tasks can be classified as objects
+
+        Eg: if same log() method is called in for different objects then we will be repeating the code; one way to solve create logger object having log() method and allow other objects to call this object; this way we create too many dependencies by creating objects which do not represent business logic and are used to support cross cutting concerns eg logging, transactions and security
+
+        3)	Using AOP we can create logging Aspect (instead of logger class) which is not referenced in individual class; Aspect provide controls to call some code before and after the execution of some method; Aspect configuartion def. which objects and methods this configuration should apply to -->
