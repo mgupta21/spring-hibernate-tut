@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	   xmlns:aop="http://www.springframework.org/schema/aop"
+	   xmlns:context="http://www.springframework.org/schema/context"
+	   xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.0.xsd
+				http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-2.0.xsd
+				http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-2.5.xsd">
+
+	<context:annotation-config/>
+
+	<!-- no need to declare JDBCDaoImpl here due to component sacn -->
+	<context:component-scan base-package="org.spring.java"></context:component-scan>
+
+	<!-- Instead of creating DB connection in JDBCDaoImpl define the connection here and can be reused by many classes -->
+	<bean id="dataSource1" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+		<property name="driverClassName" value="org.apache.derby.jdbc.ClientDriver"></property>
+		<property name="url" value="jdbc:derby://localhost:1527/db;create=true"></property>
+	</bean>
+
+	<!-- Instead of using spring's data source use dbcp which provides additional pulling configurations -->
+	<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource">
+		<property name="driverClassName" value="org.apache.derby.jdbc.ClientDriver"></property>
+		<property name="url" value="jdbc:derby://localhost:1527/db;create=true"></property>
+		<property name="initialSize" value="2"></property>
+		<property name="maxActive" value="5"></property>
+	</bean>
+
+	<!-- Setting data source in template through XML -->
+	<bean id="simpleJdbcDaoImpl" class="org.spring.java.dao.SimpleJdbcDaoImpl">
+		<property name="dataSource" ref="dataSource"></property>
+	</bean>
+
+	<!-- Hibernate Declaration - like jdbcSupportClasses we also have Hibernate support classes; with this declaration we do not need hibernate.cfg.xml  -->
+	<!-- AnnotationSessionFactoryBean is used as we used annotations in this projects there are other available classes -->
+	<!-- Hibernate is ORM model we must map models to tables in DB by declaring Entities in hibernate.cfg.xml or by using packagesToScan property; annotate circle by @Entity -->
+	<bean id="sessionFactory" class="org.springframework.orm.hibernate3.annotation.AnnotationSessionFactoryBean">
+		<property name="dataSource" ref="dataSource"></property>
+		<property name="packagesToScan" value="org.spring.java.model"/> <!-- Having Circle model -->
+		<property name="hibernateProperties"> <!-- has all the properties which are generally set in hibernate.cfg.xml -->
+			<props>
+				<prop key="dialect">org.hibernate.dialect.DerbyDialect</prop>
+			</props>
+		</property>
+	</bean>
+</beans>

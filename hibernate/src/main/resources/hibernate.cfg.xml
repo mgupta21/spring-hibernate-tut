@@ -1,0 +1,43 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE hibernate-configuration PUBLIC
+        "-//Hibernate/Hibernate Configuration DTD 3.0//EN"
+        "http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
+
+<hibernate-configuration>
+
+    <session-factory>
+
+        <!-- Database connection settings -->
+        <property name="connection.driver_class">org.apache.derby.jdbc.ClientDriver</property>
+        <property name="connection.url">jdbc:derby://localhost:1527/hibernateDB;create=true</property>
+        <property name="connection.username">admin</property>
+        <property name="connection.password">admin</property>
+
+        <!-- JDBC connection pool (use the built-in) -->
+        <property name="connection.pool_size">1</property>
+
+        <!-- SQL dialect, the language used to talk to database -->
+        <property name="dialect">org.hibernate.dialect.H2Dialect</property>
+
+        <!-- Second-level cache  -->
+        <property name="cache.use_second_level_cache">true</property>
+        <property name="cache.use_query_cache">true</property>
+        <property name="cache.provider_class">org.hibernate.cache.EhCacheProvider</property>
+
+        <!-- Echo all executed SQL to stdout -->
+        <property name="show_sql">true</property>
+
+        <!-- Drop and re-create the database schema on startup -->
+        <property name="hibernate.hbm2ddl.auto">create</property>
+
+        <!-- All hibernate model classes/tables must be mapped in this xml along with being annotated as @Entity-->
+        <mapping class="org.java.hibernate.dto.UserDetails"/>
+        <mapping class="org.java.hibernate.dto.CrudUser"/>
+        <mapping class="org.java.hibernate.dto.Vehicle"/>
+        <mapping class="org.java.hibernate.dto.Vehicles"/>
+        <mapping class="org.java.hibernate.dto.TwoWheeler"/>
+        <mapping class="org.java.hibernate.dto.FourWheeler"/>
+
+    </session-factory>
+
+</hibernate-configuration>

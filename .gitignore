@@ -1,5 +1,9 @@
 target/
-*.iml
+bin/
+.settings/
 .idea/
 .clover/
+*.iml
 .DS_Store
+.classpath
+.project

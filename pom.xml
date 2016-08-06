@@ -11,6 +11,8 @@
     <modules>
         <module>spring-core</module>
         <module>spring-aop</module>
+        <module>hibernate</module>
+        <module>spring-jdbc</module>
         <module>hibernate-sample</module>
     </modules>
 
@@ -21,6 +23,7 @@
         <javax.version>1.0.2</javax.version>
         <hibernate.version>5.2.1.Final</hibernate.version>
         <hibernate.tools.version>3.2.0.ga</hibernate.tools.version>
+        <derby.version>10.12.1.1</derby.version>
     </properties>
 
     <dependencyManagement>
@@ -50,6 +53,11 @@
                 <artifactId>spring-aop</artifactId>
                 <version>${spring.version}</version>
             </dependency>
+            <dependency>
+                <groupId>org.springframework</groupId>
+                <artifactId>spring-jdbc</artifactId>
+                <version>${spring.version}</version>
+            </dependency>
 
             <dependency>
                 <groupId>org.aspectj</groupId>
@@ -73,6 +81,18 @@
                 <artifactId>hibernate-tools</artifactId>
                 <version>${hibernate.tools.version}</version>
             </dependency>
+
+            <dependency>
+                <groupId>org.apache.derby</groupId>
+                <artifactId>derby</artifactId>
+                <version>${derby.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.derby</groupId>
+                <artifactId>derbyclient</artifactId>
+                <version>${derby.version}</version>
+            </dependency>
+
         </dependencies>
 
     </dependencyManagement>
