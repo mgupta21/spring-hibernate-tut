@@ -27,12 +27,10 @@ public class DrawingApp {
         //circle.draw();
         shape.draw();
 
-
-// AbstractApplication object is used when need to register  the hook to close the applicationContext (never the case in Enterprise applications)
+        // AbstractApplication object is used when need to register  the hook to close the applicationContext
+        // which is never the case in Enterprise applications
         AbstractApplicationContext context2 = new ClassPathXmlApplicationContext("spring.xml");
         context2.registerShutdownHook();
-
-
     }
 
 }

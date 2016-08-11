@@ -1,6 +1,6 @@
 package org.java.spring;
 
-// first read triangles and then myeventlistner and then DrawEvent
+// Read triangles >> MyEventlistener >> DrawEvent >> Circle
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -10,15 +10,17 @@ import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Component;
 
 @Component // (generic) no need to define circle bean in spring.xml + add <context:component-scan
-//@Service //gives additional info that component is a service role
-//@Repository //gives additional info that component is a Data object role
-//@Controller //gives additional info that component is a controller role
+//@Service (specific) //gives additional info that component is a service role. All your business logic should be in Service classes.
+//@Repository (specific) //gives additional info that component is a Data object role. All your database access logic should be in DAO classes
+//@Controller (specific) //gives additional info that component is a controller role
+
+// Source aka event publisher class must implement ApplicationEventPublisherAware interface
 public class Circle implements Shape, ApplicationEventPublisherAware {
-// Source class of event must implement ApplicationEventPublisherAware interface
 
     public Point radius;
     // use getMessage method on object to access messages defined in contextmessage.properties
     private MessageSource messagesource;
+
     // publisher object to publish event though publishEvent method
     private ApplicationEventPublisher publisher;
 
@@ -26,10 +28,11 @@ public class Circle implements Shape, ApplicationEventPublisherAware {
         return radius;
     }
 
-    //@Required /validate if radius is set in the spring.xml via RequiredAnnotationBeanPostProcessor
-    @Autowired //Autowires looks @byType then @byName then @byQualifier @byConstructor
-    @Qualifier("circleRelated")
-    //@Resource // Javax annotation
+    //@Required / Validate if radius is set in the spring.xml via RequiredAnnotationBeanPostProcessor
+    @Autowired
+    // Default is a type driven injection. Autowire's looks @byType then @byName then @byQualifier @byConstructor.
+    @Qualifier("circleRelated") // spring annotation used to further fine-tune autowiring.
+    //@Resource // Javax annotation // used for wiring by name
     public void setRadius(Point radius) {
         this.radius = radius;
     }
@@ -42,10 +45,16 @@ public class Circle implements Shape, ApplicationEventPublisherAware {
 
         System.out.println(this.messagesource.getMessage("greeting", null, "Didn't find key in contextmessage.properties", null));
 
-// pass this as class name to constructor which takes source of event as a parameter
+        // pass publisher to event constructor
         DrawEvent drawevent = new DrawEvent(this);
         publisher.publishEvent(drawevent);
 
+    }
+
+    // ApplicationEventPublisherAware interface
+    @Override
+    public void setApplicationEventPublisher(ApplicationEventPublisher applicationEventPublisher) {
+        this.publisher = applicationEventPublisher;
     }
 
     //@PostConstruct //initialization through annotations(javax)
@@ -53,14 +62,10 @@ public class Circle implements Shape, ApplicationEventPublisherAware {
         System.out.println("Init of Circle");
     }
 
+
     //@PreDestroy
     public void destroyCircle() {
         System.out.println("destroy of Circle");
-    }
-
-    // ApplicationEventPublisherAware interface method; register publisher as ApplicationEventPublisher
-    public void setApplicationEventPublisher(ApplicationEventPublisher publisher) {
-        this.publisher = publisher;
     }
 
     @Autowired // autowired to bean id="messageSource" in Spring.Xml
@@ -71,5 +76,4 @@ public class Circle implements Shape, ApplicationEventPublisherAware {
     public void setMessagesource(MessageSource messagesource) {
         this.messagesource = messagesource;
     }
-
 }

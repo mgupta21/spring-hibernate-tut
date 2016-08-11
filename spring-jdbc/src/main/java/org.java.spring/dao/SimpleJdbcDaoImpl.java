@@ -9,6 +9,8 @@ and namedParameterJdbcTemplateSupport*/
 
 /* to get instance of template from support use this.getJdbcTemplate() and set dataSource in template through spring.XML */
 
+import org.springframework.jdbc.core.simple.SimpleJdbcDaoSupport;
+
 public class SimpleJdbcDaoImpl extends SimpleJdbcDaoSupport {
 
     public int getCircleCount() {

@@ -2,10 +2,10 @@ package org.java.spring;
 
 import org.springframework.context.ApplicationEvent;
 
-// read myEventListener.java first
+// read MyEventListener.java first
 public class DrawEvent extends ApplicationEvent { // extend ApplicationEvent to register as a Event
 
-    // need to call constructor on extending ApplicationEvent
+    // When a class extends ApplicationEvent, it needs a constructor with publisher as argument
     public DrawEvent(Object source) {
         super(source);
     }

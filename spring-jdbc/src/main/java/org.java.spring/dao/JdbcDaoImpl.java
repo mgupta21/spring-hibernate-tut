@@ -2,6 +2,7 @@ package org.java.spring.dao;
 
 import org.apache.derby.client.am.PreparedStatement;
 import org.apache.derby.client.am.ResultSet;
+import org.java.spring.model.Circle;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -103,8 +104,8 @@ public class JdbcDaoImpl {
     }
 
     // using alternative 4;
-	/*we would still be repeating the code if we set datasouce everytime we use jdbcTemplate for different methods;
-	an alternative is to define jdbcTemplate bean in spring.XML and set its dataSource property their or initialize the
+    /*we would still be repeating the code if we set datasouce everytime we use jdbcTemplate for different methods;
+    an alternative is to define jdbcTemplate bean in spring.XML and set its dataSource property their or initialize the
 	jdbcTemplate in setDataSource()	itself in this class*/
     public int getCircleCount() {
         String sql = "Select count(*) from Circle";
